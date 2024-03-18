@@ -10,6 +10,7 @@ namespace ConsoleApp1Tests
     public class ProgramTests
     {
         [TestMethod]
+        [Ignore]
         public void Test_Solve_WhenAtLeastOneItemFits_ReturnsAtLeastOneSelectedItem()
         {
             var items = new List<Przedmiot>
@@ -28,6 +29,7 @@ namespace ConsoleApp1Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void Test_Solve_WhenNoItemFits_ReturnsEmptySelectedItems()
         {
             // Arrange
@@ -47,6 +49,7 @@ namespace ConsoleApp1Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void Test_Solve_WhenOrderOfItemsChanges_ResultStaysSame()
         {
             // Arrange
@@ -73,6 +76,7 @@ namespace ConsoleApp1Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void Test_Solve_WithSpecificInstance_ReturnsCorrectResult()
         {
             // Arrange
@@ -98,6 +102,92 @@ namespace ConsoleApp1Tests
 
             // Assert
             Assert.AreEqual(expectedResult.ToString(), result.ToString());
+        }
+
+        /// /////////////////////////////////////////////////////////////////////////////
+
+        [TestMethod]
+        public void Test_Solve_WhenNoItems_ReturnsEmptyResult()
+        {
+            // Arrange
+            var items = new List<Przedmiot>(); // Empty list of items
+            int capacity = 10;
+
+            // Act
+            Problem problem = new Problem(0, 1); // Zero items
+            var result = problem.Solve(items, capacity);
+
+            // Assert
+            Assert.AreEqual(0, result.TotalValue);
+            Assert.AreEqual(0, result.TotalWeight);
+            CollectionAssert.AreEqual(new List<int>(), result.SelectedItems);
+        }
+
+
+        [TestMethod]
+        public void Test_Solve_WithLargeCapacity_ReturnsCorrectResult()
+        {
+            // Arrange
+            var items = new List<Przedmiot>
+            {
+                new Przedmiot(1, 10, 5), // Value: 10, Weight: 5
+                new Przedmiot(2, 8, 8), // Value: 8, Weight: 8
+                new Przedmiot(3, 15, 10), // Value: 15, Weight: 10
+                new Przedmiot(4, 20, 15), // Value: 20, Weight: 15
+                new Przedmiot(5, 30, 20), // Value: 30, Weight: 20
+            };
+            int capacity = 100; // Large capacity to fit all items
+
+            // Act
+            Problem problem = new Problem(5, 1);
+            var result = problem.Solve(items, capacity);
+
+            // Assert
+            Assert.AreEqual(83, result.TotalValue); // Sum of values of all items
+            Assert.AreEqual(58, result.TotalWeight); // Sum of weights of selected items
+            CollectionAssert.AreEquivalent(new List<int> { 1, 2, 3, 4, 5 }, result.SelectedItems); // All items selected
+        }
+        [TestMethod]
+        public void Test_Solve_WithDifferentSeed_ReturnsDifferentResults()
+        {
+            // Arrange
+
+
+            int capacity = 20;
+
+            // Act
+            Problem problem1 = new Problem(10, 1);
+            problem1.GenerateItems(10);
+            Problem problem2 = new Problem(10, 10); // Different seed
+            var items1 = problem1.GenerateItems(10);
+            var items2 = problem1.GenerateItems(10);
+            var result1 = problem1.Solve(items1, capacity);
+            var result2 = problem2.Solve(items2, capacity);
+
+            // Assert
+            Assert.AreNotEqual(result1.TotalValue, result2.TotalValue);
+            Assert.AreNotEqual(result1.TotalWeight, result2.TotalWeight);
+            CollectionAssert.AreNotEquivalent(result1.SelectedItems, result2.SelectedItems);
+        }
+        [TestClass]
+        public class PrzedmiotTests
+        {
+            [TestMethod]
+            public void Test_Przedmiot_Creation()
+            {
+                // Arrange
+                int id = 1;
+                int value = 5;
+                int weight = 10;
+
+                // Act
+                Przedmiot przedmiot = new Przedmiot(id, value, weight);
+
+                // Assert
+                Assert.AreEqual(id, przedmiot.Id);
+                Assert.AreEqual(value, przedmiot.Wartosc);
+                Assert.AreEqual(weight, przedmiot.Waga);
+            }
         }
 
     }

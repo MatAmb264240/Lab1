@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("u_test")]
+[assembly: InternalsVisibleTo("WinFormsApp1")]
 
 namespace ConsoleApp1
 {
@@ -95,7 +96,7 @@ namespace ConsoleApp1
 
         public override string ToString()
         {
-            return  $"Id: {Id} Value: {Wartosc}, Weight: {Waga}";
+            return  $"Id: {Id} Value: {Wartosc}, Weight: {Waga}\n";
             //return $"{Id}, {Wartosc}, {Waga}";
         }
     }
@@ -115,7 +116,7 @@ namespace ConsoleApp1
 
         public override string ToString()
         {
-            return $"Selected items: [{string.Join(", ", SelectedItems)}], Total value: {TotalValue}, Total weight: {TotalWeight}";
+            return $"[{string.Join(", ", SelectedItems)}],\n Val: {TotalValue},\n Weig: {TotalWeight}";
         }
     }
 }
